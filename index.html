@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SwiftBridge Group — Bridging Ideas, Technology & Opportunity</title>
+<meta name="description" content="SwiftBridge Group helps businesses turn ideas into working solutions through web development, data analytics, digital services and customer support.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     TOKENS
+  ============================================================ */
+  :root{
+    --forest-deep:   #0B2E1E;
+    --forest-deeper: #071F14;
+    --forest-mid:    #143D28;
+    --sage:          #7FA087;
+    --sage-line:     #375A42;
+    --cream:         #F7F4EC;
+    --cream-dim:     #EFEADD;
+    --ink:           #10160F;
+    --ink-soft:      #445044;
+    --gold:          #C9962B;
+    --gold-soft:     #E4C583;
+    --white:         #FFFFFF;
+
+    --font-display: "Fraunces", serif;
+    --font-body: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+    --container: min(1200px, 92%);
+    --radius-s: 8px;
+    --radius-m: 16px;
+    --radius-l: 28px;
+
+    --ease: cubic-bezier(.22,1,.36,1);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  html, body{ overflow-x:hidden; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+  }
+
+  body{
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--cream);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; }
+  ul{ list-style:none; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  :focus-visible{
+    outline: 2.5px solid var(--gold);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  .container{ width:var(--container); margin-inline:auto; }
+  section{ position:relative; }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-family: var(--font-body);
+    font-size:0.78rem;
+    font-weight:700;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color: var(--gold);
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:26px; height:1px;
+    background: var(--gold);
+    display:inline-block;
+  }
+  .eyebrow.on-dark{ color: var(--gold-soft); }
+
+  h1,h2,h3,h4{
+    font-family: var(--font-display);
+    font-weight:600;
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    color: var(--ink);
+  }
+
+  .section-head{ max-width:640px; margin-bottom:56px; }
+  .section-head h2{ font-size:clamp(2rem, 4.2vw, 3rem); }
+  .section-head p{ margin-top:16px; font-size:1.05rem; color:var(--ink-soft); max-width:52ch; }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:15px 30px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.95rem;
+    letter-spacing:0.01em;
+    text-decoration:none;
+    border:1.5px solid transparent;
+    transition: transform .35s var(--ease), background .3s ease, color .3s ease, border-color .3s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn-primary{ background:var(--gold); color:var(--forest-deeper); }
+  .btn-primary:hover{ background:var(--gold-soft); }
+  .btn-ghost{ background:transparent; color:var(--white); border-color:rgba(255,255,255,0.4); }
+  .btn-ghost:hover{ border-color:var(--white); }
+  .btn-dark{ background:var(--forest-deep); color:var(--white); }
+  .btn-dark:hover{ background:var(--forest-mid); }
+
+  .btn svg{ width:16px; height:16px; transition:transform .3s var(--ease); }
+  .btn:hover svg{ transform:translate(3px,-3px); }
+
+  /* reveal-on-scroll */
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  .reveal-stagger > *{ transition-delay: calc(var(--i, 0) * 90ms); }
+
+  /* ============================================================
+     NAV
+  ============================================================ */
+  .nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    padding:22px 0;
+    transition: padding .35s var(--ease), background .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .nav.scrolled{
+    padding:12px 0;
+    background: rgba(11,46,30,0.92);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+  }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; }
+
+  .brand{ display:flex; align-items:center; gap:11px; text-decoration:none; }
+  .brand-mark{ width:38px; height:38px; flex-shrink:0; }
+  /* Logo image (replace the SVG mark with your real logo file) */
+  .logo-img{ height:44px; width:auto; max-width:170px; object-fit:contain; flex-shrink:0; }
+  footer .logo-img{ height:40px; filter:brightness(1.15); }
+  .brand-word{ font-family:var(--font-display); font-weight:600; font-size:1.18rem; color:var(--white); letter-spacing:-0.01em; }
+  .brand-word b{ color:var(--gold-soft); font-weight:600; }
+
+  .nav-links{ display:flex; align-items:center; gap:36px; }
+  .nav-links a{
+    color: rgba(255,255,255,0.82);
+    text-decoration:none;
+    font-size:0.92rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+    position:relative;
+    padding-bottom:4px;
+  }
+  .nav-links a::after{
+    content:""; position:absolute; left:0; bottom:0; height:2px; width:0;
+    background:var(--gold); transition:width .3s var(--ease);
+  }
+  .nav-links a:hover{ color:var(--white); }
+  .nav-links a:hover::after, .nav-links a.active::after{ width:100%; }
+  .nav-links a.active{ color:var(--white); }
+
+  .nav-cta{ display:flex; align-items:center; gap:22px; }
+  .nav-cta .btn{ padding:11px 22px; font-size:0.85rem; }
+
+  .burger{
+    display:none;
+    width:26px; height:20px; position:relative;
+    background:none; border:none;
+  }
+  .burger span{
+    position:absolute; left:0; width:100%; height:2px; background:var(--white);
+    transition: transform .3s var(--ease), opacity .3s var(--ease), top .3s var(--ease);
+  }
+  .burger span:nth-child(1){ top:0; }
+  .burger span:nth-child(2){ top:9px; }
+  .burger span:nth-child(3){ top:18px; }
+  .burger.open span:nth-child(1){ top:9px; transform:rotate(45deg); }
+  .burger.open span:nth-child(2){ opacity:0; }
+  .burger.open span:nth-child(3){ top:9px; transform:rotate(-45deg); }
+
+  .mobile-panel{
+    position:fixed; inset:0 0 0 auto; width:min(340px,84vw); height:100vh;
+    background: var(--forest-deeper);
+    z-index:99;
+    transform:translateX(100%);
+    transition: transform .45s var(--ease);
+    padding:110px 34px 40px;
+    display:flex; flex-direction:column; gap:26px;
+  }
+  .mobile-panel.open{ transform:translateX(0); }
+  .mobile-panel a{ color:var(--white); text-decoration:none; font-family:var(--font-display); font-size:1.5rem; font-weight:500; }
+  .scrim{
+    position:fixed; inset:0; background:rgba(3,15,9,0.55); z-index:98;
+    opacity:0; pointer-events:none; transition:opacity .4s ease;
+  }
+  .scrim.open{ opacity:1; pointer-events:auto; }
+
+  /* ============================================================
+     HERO
+  ============================================================ */
+  .hero{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse 900px 500px at 82% -10%, rgba(201,150,43,0.16), transparent 60%),
+      linear-gradient(180deg, var(--forest-deeper) 0%, var(--forest-deep) 55%, var(--forest-mid) 100%);
+    color:var(--white);
+    display:flex; flex-direction:column; justify-content:center;
+    padding-top:120px; padding-bottom:80px;
+    overflow:hidden;
+  }
+
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap:40px;
+    align-items:center;
+  }
+
+  .hero-title{
+    font-size:clamp(2.6rem, 5.6vw, 4.6rem);
+    letter-spacing:-0.02em;
+  }
+  .hero-title em{ font-style:italic; color:var(--gold-soft); font-weight:500; }
+  .hero-sub{
+    margin-top:26px;
+    font-size:1.12rem;
+    color:rgba(255,255,255,0.72);
+    max-width:46ch;
+  }
+  .hero-actions{ display:flex; gap:16px; margin-top:40px; flex-wrap:wrap; }
+
+  .hero-stats{ display:flex; gap:38px; margin-top:60px; flex-wrap:wrap; }
+  .hero-stat b{ display:block; font-family:var(--font-display); font-size:1.9rem; color:var(--white); }
+  .hero-stat span{ font-size:0.82rem; color:rgba(255,255,255,0.55); letter-spacing:0.02em; }
+
+  .hero-visual{ position:relative; }
+  .bridge-svg{ width:100%; height:auto; }
+  .bridge-path{
+    stroke-dasharray:1400; stroke-dashoffset:1400;
+    animation: draw 2.4s var(--ease) forwards 0.35s;
+  }
+  .bridge-cable{
+    stroke-dasharray:60; stroke-dashoffset:60;
+    animation: draw 1s ease forwards;
+  }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+  .bridge-dot{ animation: pulse 2.6s ease-in-out infinite; transform-origin:center; }
+  @keyframes pulse{ 0%,100%{ opacity:0.55; transform:scale(1);} 50%{ opacity:1; transform:scale(1.35);} }
+
+  .scroll-cue{
+    position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    color:rgba(255,255,255,0.55); font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase;
+  }
+  .scroll-cue .line{ width:1px; height:34px; background:rgba(255,255,255,0.3); position:relative; overflow:hidden; }
+  .scroll-cue .line::after{
+    content:""; position:absolute; top:-34px; left:0; width:100%; height:34px; background:var(--gold-soft);
+    animation:scrollcue 2.1s ease-in-out infinite;
+  }
+  @keyframes scrollcue{ 0%{ top:-34px;} 60%,100%{ top:34px;} }
+
+  /* ---------- Hero images (tilted pair) ---------- */
+  .hero-images{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:14px;
+    position:relative;
+  }
+  .hero-images img{
+    width:270px;
+    height:340px;
+    object-fit:cover;
+    border-radius:var(--radius-m);
+    box-shadow:0 22px 44px rgba(3,15,9,0.45);
+    opacity:0;
+    transform:translateY(24px);
+    animation:heroImgIn .9s var(--ease) forwards;
+  }
+  .hero-images img:first-child{ transform:rotate(-6deg) translateY(24px); animation-delay:.15s; z-index:1; }
+  .hero-images img:last-child{ transform:rotate(6deg) translateY(24px); margin-top:36px; animation-delay:.35s; z-index:2; }
+  @keyframes heroImgIn{ to{ opacity:1; transform:rotate(var(--tilt,0)) translateY(0); } }
+  .hero-images img:first-child{ --tilt:-6deg; }
+  .hero-images img:last-child{ --tilt:6deg; }
+  .hero-images img:hover{ transform:rotate(0deg) translateY(-6px) scale(1.02); z-index:3; }
+
+  @media (max-width:1000px){
+    .hero-images{ gap:20px; }
+    .hero-images img{ width:44vw; max-width:230px; height:290px; }
+    .hero-images img:last-child{ margin-top:26px; }
+  }
+  @media (max-width:600px){
+    .hero-images img{ width:150px; height:200px; }
+  }
+
+  /* ============================================================
+     ROOTED IN AFRICA — flowing banner
+  ============================================================ */
+  .rooted-band{
+    background:var(--forest-deeper);
+    padding:26px 0;
+    overflow:hidden;
+    border-top:1px solid rgba(201,150,43,0.25);
+    border-bottom:1px solid rgba(201,150,43,0.25);
+  }
+  .rooted-track{
+    display:flex; width:max-content; gap:70px;
+    animation:rootedScroll 22s linear infinite;
+  }
+  .rooted-track span{
+    display:flex; align-items:center; gap:70px; white-space:nowrap;
+    font-family:var(--font-display);
+    font-style:italic;
+    font-weight:500;
+    font-size:clamp(1.6rem, 3.4vw, 2.6rem);
+    letter-spacing:0.01em;
+    color:var(--gold-soft);
+  }
+  .rooted-track .dot{
+    width:9px; height:9px; border-radius:50%; background:var(--gold); flex-shrink:0;
+    font-size:0; opacity:0.85;
+  }
+  @keyframes rootedScroll{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+
+  /* ============================================================
+     MARQUEE STRIP
+  ============================================================ */
+  .strip{
+    background:var(--cream-dim);
+    border-block:1px solid rgba(16,22,15,0.08);
+    padding:20px 0;
+    overflow:hidden;
+  }
+  .strip-track{
+    display:flex; gap:60px; width:max-content;
+    animation: marquee 26s linear infinite;
+    font-family:var(--font-display); font-size:1.1rem; color:var(--ink-soft);
+  }
+  .strip-track span{ display:flex; align-items:center; gap:60px; white-space:nowrap; }
+  .strip-track em{ color:var(--gold); font-style:normal; margin-inline:6px; }
+  @keyframes marquee{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+
+  /* ============================================================
+     ABOUT
+  ============================================================ */
+  .about{ padding:130px 0 110px; background:var(--cream); }
+  .about-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:80px; align-items:start; }
+  .about h2{ font-size:clamp(2.1rem,4.4vw,3.1rem); }
+  .about-copy p{ font-size:1.06rem; color:var(--ink-soft); margin-bottom:20px; max-width:56ch; }
+  .about-copy p:first-child{ font-size:1.2rem; color:var(--ink); font-weight:500; }
+
+  .value-list{ margin-top:36px; display:flex; flex-direction:column; gap:22px; }
+  .value-item{ display:flex; gap:18px; align-items:flex-start; }
+  .value-num{ font-family:var(--font-display); font-size:1rem; color:var(--gold); border:1px solid var(--gold); border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .value-item h4{ font-size:1.05rem; margin-bottom:4px; }
+  .value-item p{ color:var(--ink-soft); font-size:0.95rem; }
+
+  /* ============================================================
+     SERVICES
+  ============================================================ */
+  .services{ padding:110px 0; background:var(--forest-deep); color:var(--white); position:relative; }
+  .services::before{
+    content:""; position:absolute; inset:0;
+    background: radial-gradient(ellipse 700px 400px at 10% 100%, rgba(201,150,43,0.12), transparent 60%);
+    pointer-events:none;
+  }
+  .services .section-head p{ color:rgba(255,255,255,0.65); }
+  .services .section-head h2{ color:var(--white); }
+
+  .service-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .service-card{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:var(--radius-m);
+    padding:36px 30px;
+    transition:transform .4s var(--ease), background .4s ease, border-color .4s ease;
+  }
+  .service-card:hover{ transform:translateY(-6px); background:rgba(255,255,255,0.07); border-color:rgba(201,150,43,0.5); }
+  .service-icon{
+    width:48px; height:48px; border-radius:12px;
+    background:linear-gradient(140deg, var(--gold), #8a6417);
+    display:flex; align-items:center; justify-content:center; margin-bottom:22px;
+  }
+  .service-icon svg{ width:24px; height:24px; stroke:var(--forest-deeper); }
+  .service-card h3{ color:var(--white); font-size:1.18rem; margin-bottom:12px; }
+  .service-card p{ color:rgba(255,255,255,0.62); font-size:0.95rem; }
+
+  /* ============================================================
+     PROJECTS
+  ============================================================ */
+  .projects{ padding:120px 0; background:var(--cream); }
+  .filter-bar{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:44px; }
+  .filter-btn{
+    padding:9px 20px; border-radius:999px; border:1.5px solid rgba(16,22,15,0.15);
+    background:transparent; font-weight:700; font-size:0.85rem; color:var(--ink-soft);
+    transition:all .3s ease;
+  }
+  .filter-btn:hover{ border-color:var(--forest-deep); color:var(--ink); }
+  .filter-btn.active{ background:var(--forest-deep); border-color:var(--forest-deep); color:var(--white); }
+
+  .project-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; }
+  .project-card{
+    position:relative; border-radius:var(--radius-m); overflow:hidden; cursor:pointer;
+    aspect-ratio:4/3.1;
+    transition:transform .5s var(--ease), box-shadow .5s var(--ease);
+  }
+  .project-card:hover{ transform:translateY(-6px); box-shadow:0 24px 44px rgba(11,46,30,0.18); }
+  .project-card.hide{ display:none; }
+  .project-thumb{
+    position:absolute; inset:0;
+    display:flex; align-items:flex-end;
+    padding:26px;
+  }
+  .project-thumb::after{
+    content:""; position:absolute; inset:0; z-index:0;
+    background:linear-gradient(200deg, transparent 30%, rgba(4,12,7,0.82) 100%);
+  }
+  .project-info{ position:relative; z-index:1; color:var(--white); }
+  .project-tag{ font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold-soft); font-weight:700; margin-bottom:8px; display:block; }
+  .project-info h3{ font-size:1.25rem; color:var(--white); }
+  .project-view{
+    position:absolute; top:22px; right:22px; z-index:1;
+    width:40px; height:40px; border-radius:50%;
+    background:rgba(255,255,255,0.14); backdrop-filter:blur(6px);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; transform:translateY(-8px);
+    transition:all .35s var(--ease);
+  }
+  .project-card:hover .project-view{ opacity:1; transform:translateY(0); }
+  .project-view svg{ width:16px; height:16px; stroke:var(--white); }
+
+  /* modal */
+  .modal-scrim{
+    position:fixed; inset:0; background:rgba(4,12,7,0.72); backdrop-filter:blur(4px);
+    z-index:200; display:flex; align-items:center; justify-content:center; padding:24px;
+    opacity:0; pointer-events:none; transition:opacity .35s ease;
+  }
+  .modal-scrim.open{ opacity:1; pointer-events:auto; }
+  .modal{
+    background:var(--cream); border-radius:var(--radius-l); max-width:640px; width:100%;
+    padding:44px; position:relative; max-height:86vh; overflow-y:auto;
+    transform:translateY(24px) scale(0.98); transition:transform .4s var(--ease);
+  }
+  .modal-scrim.open .modal{ transform:translateY(0) scale(1); }
+  .modal-close{
+    position:absolute; top:20px; right:20px; width:36px; height:36px; border-radius:50%;
+    background:var(--cream-dim); border:none; display:flex; align-items:center; justify-content:center;
+  }
+  .modal-thumb{ width:100%; aspect-ratio:16/9; border-radius:var(--radius-m); margin-bottom:26px; }
+  .modal h3{ font-size:1.7rem; margin-bottom:10px; }
+  .modal .project-tag{ color:var(--gold); }
+  .modal p{ color:var(--ink-soft); margin:16px 0; }
+  .modal-meta{ display:flex; gap:30px; margin-top:22px; padding-top:22px; border-top:1px solid rgba(16,22,15,0.1); flex-wrap:wrap; }
+  .modal-meta div span{ display:block; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); margin-bottom:4px; }
+  .modal-meta div b{ font-family:var(--font-display); font-weight:600; }
+
+  /* ============================================================
+     TEAM
+  ============================================================ */
+  .team{ padding:120px 0; background:var(--white); }
+  .team-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:26px; }
+  .team-card{ text-align:center; }
+  .team-avatar{
+    width:100%; aspect-ratio:1; border-radius:var(--radius-m);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-size:2.2rem; color:var(--white);
+    margin-bottom:20px; position:relative; overflow:hidden;
+  }
+  .team-avatar::after{ content:""; position:absolute; inset:0; background:linear-gradient(160deg, rgba(255,255,255,0.18), transparent 60%); }
+  .team-card h4{ font-size:1.08rem; margin-bottom:4px; }
+  .team-card .role{ font-size:0.85rem; color:var(--ink-soft); }
+  .team-socials{ display:flex; gap:10px; justify-content:center; margin-top:14px; }
+  .team-socials a{
+    width:32px; height:32px; border-radius:50%; border:1px solid rgba(16,22,15,0.15);
+    display:flex; align-items:center; justify-content:center; text-decoration:none;
+    transition:all .3s ease;
+  }
+  .team-socials a:hover{ background:var(--forest-deep); border-color:var(--forest-deep); }
+  .team-socials a:hover svg{ stroke:var(--white); }
+  .team-socials svg{ width:14px; height:14px; stroke:var(--ink-soft); transition:stroke .3s ease; }
+
+  /* ============================================================
+     TESTIMONIALS
+  ============================================================ */
+  .testimonials{ padding:120px 0; background:var(--forest-deep); color:var(--white); overflow:hidden; }
+  .testimonials .section-head h2{ color:var(--white); }
+  .testimonials .section-head p{ color:rgba(255,255,255,0.65); }
+  .t-track-wrap{ position:relative; }
+  .t-track{ display:flex; transition:transform .6s var(--ease); }
+  .t-slide{ min-width:100%; }
+  .t-card{
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+    border-radius:var(--radius-l); padding:52px; max-width:760px; margin:auto;
+  }
+  .t-quote{ font-family:var(--font-display); font-size:1.5rem; font-weight:500; line-height:1.45; color:var(--white); }
+  .t-quote::before{ content:"\201C"; color:var(--gold); }
+  .t-person{ display:flex; align-items:center; gap:14px; margin-top:30px; }
+  .t-avatar{ width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); color:var(--white); flex-shrink:0; }
+  .t-person b{ display:block; font-size:0.95rem; }
+  .t-person span{ font-size:0.82rem; color:rgba(255,255,255,0.55); }
+  .t-nav{ display:flex; justify-content:center; gap:14px; margin-top:40px; align-items:center; }
+  .t-arrow{
+    width:44px; height:44px; border-radius:50%; border:1px solid rgba(255,255,255,0.25);
+    background:transparent; display:flex; align-items:center; justify-content:center; transition:all .3s ease;
+  }
+  .t-arrow:hover{ background:var(--gold); border-color:var(--gold); }
+  .t-arrow svg{ width:16px; height:16px; stroke:var(--white); }
+  .t-dots{ display:flex; gap:8px; }
+  .t-dot{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.3); border:none; transition:all .3s ease; }
+  .t-dot.active{ background:var(--gold); width:22px; border-radius:5px; }
+
+  /* ============================================================
+     CONTACT
+  ============================================================ */
+  .contact{ padding:120px 0; background:var(--cream); }
+  .contact-grid{ display:grid; grid-template-columns:0.85fr 1.15fr; gap:60px; }
+  .contact-info h2{ font-size:clamp(2rem,4vw,2.8rem); margin-bottom:18px; }
+  .contact-info > p{ color:var(--ink-soft); max-width:44ch; margin-bottom:36px; }
+  .contact-item{ display:flex; gap:16px; align-items:flex-start; margin-bottom:26px; }
+  .contact-icon{ width:42px; height:42px; border-radius:11px; background:var(--forest-deep); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .contact-icon svg{ width:18px; height:18px; stroke:var(--gold-soft); }
+  .contact-item h4{ font-size:0.95rem; margin-bottom:3px; }
+  .contact-item a, .contact-item span{ color:var(--ink-soft); font-size:0.92rem; text-decoration:none; }
+  .contact-item a:hover{ color:var(--forest-deep); }
+
+  .contact-socials{ display:flex; gap:10px; margin-top:36px; }
+  .contact-socials a{
+    width:40px; height:40px; border-radius:50%; background:var(--white); border:1px solid rgba(16,22,15,0.12);
+    display:flex; align-items:center; justify-content:center; transition:all .3s ease;
+  }
+  .contact-socials a:hover{ background:var(--forest-deep); border-color:var(--forest-deep); }
+  .contact-socials a:hover svg{ stroke:var(--white); }
+  .contact-socials svg{ width:16px; height:16px; stroke:var(--ink-soft); transition:stroke .3s ease; }
+
+  .contact-form{
+    background:var(--white); border-radius:var(--radius-l); padding:44px;
+    border:1px solid rgba(16,22,15,0.08); box-shadow:0 30px 60px rgba(11,46,30,0.08);
+  }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .field{ margin-bottom:20px; }
+  .field label{ display:block; font-size:0.8rem; font-weight:700; margin-bottom:8px; color:var(--ink); letter-spacing:0.02em; }
+  .field input, .field select, .field textarea{
+    width:100%; padding:13px 16px; border-radius:10px; border:1.5px solid rgba(16,22,15,0.14);
+    font-family:inherit; font-size:0.95rem; background:var(--cream); color:var(--ink);
+    transition:border-color .3s ease, background .3s ease;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none; border-color:var(--forest-deep); background:var(--white);
+  }
+  .field textarea{ resize:vertical; min-height:120px; }
+  .form-note{ font-size:0.82rem; color:var(--ink-soft); margin-top:14px; }
+  .form-success{
+    display:none; align-items:center; gap:12px; background:#eef6ee; color:#245c31;
+    border:1px solid #bfe0c2; border-radius:10px; padding:16px 18px; font-size:0.92rem; margin-bottom:20px;
+  }
+  .form-success.show{ display:flex; }
+  .form-success svg{ width:20px; height:20px; stroke:#245c31; flex-shrink:0; }
+  .contact-form button[type="submit"]{ width:100%; justify-content:center; border:none; }
+
+  /* ============================================================
+     CTA BAND
+  ============================================================ */
+  .cta-band{
+    background:var(--forest-deeper); color:var(--white); text-align:center; padding:90px 0;
+    position:relative; overflow:hidden;
+  }
+  .cta-band::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(ellipse 600px 300px at 50% 0%, rgba(201,150,43,0.16), transparent 65%);
+  }
+  .cta-band h2{ color:var(--white); font-size:clamp(1.8rem,3.6vw,2.6rem); position:relative; }
+  .cta-band .btn{ margin-top:30px; position:relative; }
+
+  /* ============================================================
+     FOOTER
+  ============================================================ */
+  footer{ background:var(--forest-deeper); color:rgba(255,255,255,0.6); padding:70px 0 30px; }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; padding-bottom:50px; border-bottom:1px solid rgba(255,255,255,0.08); }
+  .footer-brand p{ margin-top:16px; font-size:0.9rem; max-width:32ch; }
+  .footer-col h4{ color:var(--white); font-family:var(--font-body); font-size:0.85rem; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:18px; }
+  .footer-col a{ display:block; color:rgba(255,255,255,0.6); text-decoration:none; font-size:0.9rem; margin-bottom:12px; transition:color .3s ease; }
+  .footer-col a:hover{ color:var(--gold-soft); }
+  .footer-bottom{ display:flex; justify-content:space-between; align-items:center; padding-top:26px; font-size:0.82rem; flex-wrap:wrap; gap:14px; }
+  .back-top{
+    width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,0.2);
+    display:flex; align-items:center; justify-content:center; text-decoration:none; transition:all .3s ease;
+  }
+  .back-top:hover{ background:var(--gold); border-color:var(--gold); }
+  .back-top svg{ width:15px; height:15px; stroke:var(--white); }
+
+  /* ============================================================
+     RESPONSIVE
+  ============================================================ */
+  @media (max-width:1000px){
+    .nav-links{ display:none; }
+    .nav-cta .btn span{ display:none; }
+    .burger{ display:block; }
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-visual{ order:-1; max-width:340px; margin:auto; }
+    .about-grid{ grid-template-columns:1fr; gap:50px; }
+    .service-grid{ grid-template-columns:1fr 1fr; }
+    .project-grid{ grid-template-columns:1fr 1fr; }
+    .team-grid{ grid-template-columns:1fr 1fr; }
+    .contact-grid{ grid-template-columns:1fr; }
+    .footer-grid{ grid-template-columns:1fr 1fr; gap:36px; }
+  }
+
+  @media (max-width:640px){
+    .service-grid, .project-grid, .team-grid{ grid-template-columns:1fr; }
+    .form-row{ grid-template-columns:1fr; }
+    .hero-stats{ gap:26px; }
+    .footer-grid{ grid-template-columns:1fr; }
+    .about, .services, .projects, .team, .testimonials, .contact, .cta-band{ padding-block:80px; }
+    .t-card{ padding:34px 26px; }
+    .modal{ padding:28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAV
+============================================================ -->
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#home" class="brand">
+      <!-- Replace SBG-3.png below with your logo file (keep it in the same folder as this HTML, or update the path) -->
+      <img src="SBG-3.png" alt="SwiftBridge Group logo" class="logo-img">
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-cta">
+      <a href="#contact" class="btn btn-primary"><span>Start a project</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
+      </a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="scrim" id="scrim"></div>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#projects">Projects</a>
+  <a href="#team">Team</a>
+  <a href="#testimonials">Testimonials</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section class="hero" id="home">
+  <div class="container hero-grid">
+    <div>
+      <p class="eyebrow on-dark">Bridging Ideas, Technology & Opportunity</p>
+      <h1 class="hero-title">We turn ideas into<br><em>working solutions.</em></h1>
+      <p class="hero-sub">SwiftBridge Group partners with businesses and individuals to solve real problems — through web development, data analytics, digital services and dependable support.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">See our work
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
+        </a>
+        <a href="#contact" class="btn btn-ghost">Start a conversation</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b id="statServices">6</b><span>Core service lines</span></div>
+        <div class="hero-stat"><b id="statFocus">100%</b><span>Client-focused delivery</span></div>
+        <div class="hero-stat"><b id="statFields">3</b><span>Disciplines in every project</span></div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <!-- Replace BLACKGUY.jpg / WOMAN.jpg below with your real photos (same folder, or update the path) -->
+      <div class="hero-images">
+        <img src="BLACKGUY.jpg" alt="SwiftBridge Group client">
+        <img src="WOMAN.jpg" alt="SwiftBridge Group client">
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+</section>
+
+<div class="rooted-band">
+  <div class="rooted-track">
+    <span>ROOTED IN AFRICA <span class="dot">•</span> ROOTED IN AFRICA <span class="dot">•</span> ROOTED IN AFRICA <span class="dot">•</span></span>
+    <span>ROOTED IN AFRICA <span class="dot">•</span> ROOTED IN AFRICA <span class="dot">•</span> ROOTED IN AFRICA <span class="dot">•</span></span>
+  </div>
+</div>
+
+<div class="strip">
+  <div class="strip-track">
+    <span>Web Development <em>•</em> Data Analytics <em>•</em> Graphic Design <em>•</em> Digital Solutions <em>•</em> Customer Support <em>•</em> Digital Training <em>•</em></span>
+    <span>Web Development <em>•</em> Data Analytics <em>•</em> Graphic Design <em>•</em> Digital Solutions <em>•</em> Customer Support <em>•</em> Digital Training <em>•</em></span>
+  </div>
+</div>
+
+<!-- ============================================================
+     ABOUT
+============================================================ -->
+<section class="about" id="about">
+  <div class="container about-grid">
+    <div class="reveal">
+      <p class="eyebrow">About SwiftBridge</p>
+      <h2>Bridging ideas and&nbsp;execution.</h2>
+    </div>
+
+    <div class="reveal about-copy">
+      <p>We bridge the gap between ideas and execution — combining technology, data, and creative thinking to help businesses and individuals solve real problems.</p>
+      <p>Every engagement starts with understanding what you're actually trying to achieve, then bringing the right mix of skills to get you there: from a support process that keeps customers happy, to a website that represents your brand properly, to insights hidden in data you already have.</p>
+
+      <div class="value-list">
+        <div class="value-item">
+          <span class="value-num">1</span>
+          <div><h4>Understand</h4><p>We start by listening — to your goals, constraints, and the problem underneath the request.</p></div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">2</span>
+          <div><h4>Build</h4><p>We design and build the solution with the right blend of technology, data, and craft.</p></div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">3</span>
+          <div><h4>Grow</h4><p>We hand over something built to evolve as your business and needs change.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SERVICES
+============================================================ -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow on-dark">What we do</p>
+      <h2>Services built around outcomes.</h2>
+      <p>Six disciplines, one team — engaged individually or together depending on what the problem actually needs.</p>
+    </div>
+
+    <div class="service-grid reveal-stagger">
+      <div class="service-card reveal" style="--i:0">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <h3>Customer Support Solutions</h3>
+        <p>Professional support, communication and service processes that improve how your customers experience your business.</p>
+      </div>
+      <div class="service-card reveal" style="--i:1">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M7 15l4-6 4 3 5-8"/></svg></div>
+        <h3>Data Analytics</h3>
+        <p>We turn raw data into meaningful insight — supporting better decisions and surfacing opportunities for growth.</p>
+      </div>
+      <div class="service-card reveal" style="--i:2">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+        <h3>Web Development</h3>
+        <p>Modern, responsive websites that give businesses a professional presence and connect them with customers online.</p>
+      </div>
+      <div class="service-card reveal" style="--i:3">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.6 0-.4-.2-.8-.4-1.1-.2-.3-.4-.7-.4-1.1 0-.9.7-1.6 1.6-1.6h1.9c3 0 5.7-2.6 5.7-5.7C22 6.1 17.5 2 12 2z"/></svg></div>
+        <h3>Graphic Design</h3>
+        <p>Visually compelling design that helps businesses communicate clearly and build a strong, consistent brand identity.</p>
+      </div>
+      <div class="service-card reveal" style="--i:4">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <h3>Digital & Technology Solutions</h3>
+        <p>Practical tools and systems that help businesses run more efficiently and stay competitive.</p>
+      </div>
+      <div class="service-card reveal" style="--i:5">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5zM6 12v5c0 1.7 3 3 6 3s6-1.3 6-3v-5"/></svg></div>
+        <h3>Digital Skills & Training</h3>
+        <p>Practical, hands-on learning that helps individuals build relevant digital and professional skills.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROJECTS
+============================================================ -->
+<section class="projects" id="projects">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Selected work</p>
+      <h2>Projects & portfolio.</h2>
+      <p>A look at recent engagements. Filter by discipline, or open a project to see the details.</p>
+    </div>
+
+    <div class="filter-bar reveal">
+      <button class="filter-btn active" data-filter="all">All work</button>
+      <button class="filter-btn" data-filter="web">Web Development</button>
+      <button class="filter-btn" data-filter="data">Data Analytics</button>
+      <button class="filter-btn" data-filter="design">Design</button>
+      <button class="filter-btn" data-filter="support">Support & Training</button>
+    </div>
+
+    <div class="project-grid" id="projectGrid">
+      <!-- injected by JS -->
+    </div>
+  </div>
+</section>
+
+<div class="modal-scrim" id="modalScrim">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Close project details">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10160F" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="modal-thumb" id="modalThumb"></div>
+    <span class="project-tag" id="modalTag"></span>
+    <h3 id="modalTitle"></h3>
+    <p id="modalDesc"></p>
+    <div class="modal-meta">
+      <div><span>Service</span><b id="modalService"></b></div>
+      <div><span>Scope</span><b id="modalScope"></b></div>
+      <div><span>Year</span><b id="modalYear"></b></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TEAM
+============================================================ -->
+<section class="team" id="team">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">The people</p>
+      <h2>Meet the team.</h2>
+      <p>A small, hands-on team covering strategy, engineering, design and delivery.</p>
+    </div>
+
+    <div class="team-grid reveal-stagger" id="teamGrid"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TESTIMONIALS
+============================================================ -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-head reveal" style="margin-inline:auto; text-align:center;">
+      <p class="eyebrow on-dark" style="justify-content:center;">Client feedback</p>
+      <h2>What clients say.</h2>
+    </div>
+
+    <div class="t-track-wrap reveal">
+      <div class="t-track" id="tTrack"></div>
+      <div class="t-nav">
+        <button class="t-arrow" id="tPrev" aria-label="Previous testimonial"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="t-dots" id="tDots"></div>
+        <button class="t-arrow" id="tNext" aria-label="Next testimonial"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+============================================================ -->
+<section class="contact" id="contact">
+  <div class="container contact-grid">
+    <div class="contact-info reveal">
+      <p class="eyebrow">Get in touch</p>
+      <h2>Have an idea?<br>Let's build it.</h2>
+      <p>Tell us what you're working on — a website, a data problem, a design refresh, or something else entirely. We'll follow up within one business day.</p>
+
+      <div class="contact-item">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <div><h4>WhatsApp / Phone</h4><a href="https://wa.me/2349047625980" target="_blank" rel="noopener">+234 904 762 5980</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/></svg></div>
+        <div><h4>Email</h4><a href="mailto:hello@swiftbridgegroup.com">hello@swiftbridgegroup.com</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><h4>Location</h4><span>Nigeria — working with clients remotely, worldwide</span></div>
+      </div>
+
+      <div class="contact-socials">
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="#" aria-label="X / Twitter"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 2h4l-8 9 9 11h-6l-6-7-7 7H2l8.5-9.5L2 2h6l5.5 6.5z"/></svg></a>
+      </div>
+    </div>
+
+    <form class="contact-form reveal" id="contactForm">
+      <div class="form-success" id="formSuccess">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+        <span>Thanks — your message has been sent. We'll be in touch shortly.</span>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="fname">Full name</label>
+          <input type="text" id="fname" name="name" placeholder="Your name" required>
+        </div>
+        <div class="field">
+          <label for="femail">Email</label>
+          <input type="email" id="femail" name="email" placeholder="you@email.com" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="fcompany">Company (optional)</label>
+          <input type="text" id="fcompany" name="company" placeholder="Company name">
+        </div>
+        <div class="field">
+          <label for="fservice">Service needed</label>
+          <select id="fservice" name="service">
+            <option>Web Development</option>
+            <option>Data Analytics</option>
+            <option>Graphic Design</option>
+            <option>Digital & Technology Solutions</option>
+            <option>Customer Support Solutions</option>
+            <option>Digital Skills & Training</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="fmessage">Message</label>
+        <textarea id="fmessage" name="message" placeholder="Tell us a bit about your project or idea..." required></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-dark">Send message
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      </button>
+      <p class="form-note">Prefer WhatsApp? <a href="https://wa.me/2349047625980" target="_blank" rel="noopener" style="color:var(--forest-deep); font-weight:700;">Message us directly</a> instead.</p>
+    </form>
+  </div>
+</section>
+
+<div class="cta-band">
+  <div class="container">
+    <h2>Ready to bridge your idea to an outcome?</h2>
+    <a href="#contact" class="btn btn-primary">Let's talk
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg>
+    </a>
+  </div>
+</div>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#home" class="brand">
+          <img src="SBG-3.png" alt="SwiftBridge Group logo" class="logo-img">
+        </a>
+        <p>Bridging ideas, technology and opportunity — for businesses and individuals ready to grow.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#projects">Projects</a>
+        <a href="#team">Team</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="#services">Web Development</a>
+        <a href="#services">Data Analytics</a>
+        <a href="#services">Graphic Design</a>
+        <a href="#services">Digital Training</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@swiftbridgegroup.com">hello@swiftbridgegroup.com</a>
+        <a href="https://wa.me/2349047625980" target="_blank" rel="noopener">+234 904 762 5980</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 SwiftBridge Group. All rights reserved.</span>
+      <a href="#home" class="back-top" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- DATA (edit here to update content) ---------- */
+  const projects = [
+    { title:"Kaduna Retail — Storefront Rebuild", tag:"Web Development", cat:"web", service:"Web Development", scope:"Design + Build", year:"2026",
+      desc:"A responsive e-commerce storefront rebuilt from the ground up, focused on fast load times and a clear checkout flow.",
+      grad:"linear-gradient(135deg,#0B2E1E,#1F5C3B)" },
+    { title:"Northbridge Retail — Sales Dashboard", tag:"Data Analytics", cat:"data", service:"Data Analytics", scope:"Analysis + Dashboard", year:"2026",
+      desc:"Turned three years of raw sales exports into a live dashboard the team now checks weekly to plan inventory.",
+      grad:"linear-gradient(135deg,#143D28,#C9962B)" },
+    { title:"Amoka Studio — Brand Identity", tag:"Graphic Design", cat:"design", service:"Graphic Design", scope:"Brand Identity", year:"2025",
+      desc:"Full brand identity — logo system, color palette and templates — for a boutique creative studio.",
+      grad:"linear-gradient(135deg,#7FA087,#0B2E1E)" },
+    { title:"Coastline Support — Helpdesk Setup", tag:"Customer Support", cat:"support", service:"Customer Support Solutions", scope:"Process + Training", year:"2025",
+      desc:"Designed a support workflow and trained a five-person team, cutting average response time significantly.",
+      grad:"linear-gradient(135deg,#375A42,#0B2E1E)" },
+    { title:"Everline Logistics — Ops Website", tag:"Web Development", cat:"web", service:"Web Development", scope:"Design + Build", year:"2025",
+      desc:"A lightweight operations site giving clients real-time visibility into shipment status.",
+      grad:"linear-gradient(135deg,#0B2E1E,#7FA087)" },
+    { title:"Riverstone Academy — Digital Skills Cohort", tag:"Digital Training", cat:"support", service:"Digital Skills & Training", scope:"Curriculum + Delivery", year:"2026",
+      desc:"An eight-week practical training cohort covering core digital tools for early-career professionals.",
+      grad:"linear-gradient(135deg,#C9962B,#0B2E1E)" }
+  ];
+
+  const team = [
+    { name:"Ahmed Amoka", role:"Founder & Lead", grad:"linear-gradient(135deg,#0B2E1E,#375A42)" },
+    { name:"Bilkisu Yusuf", role:"Web Development", grad:"linear-gradient(135deg,#143D28,#7FA087)" },
+    { name:"Chinedu Okafor", role:"Data Analytics", grad:"linear-gradient(135deg,#C9962B,#8a6417)" },
+    { name:"Fatima Bello", role:"Design & Brand", grad:"linear-gradient(135deg,#375A42,#0B2E1E)" }
+  ];
+
+  const testimonials = [
+    { quote:"They understood exactly what we needed before we'd fully explained it ourselves. The new site paid for itself within weeks.", name:"Grace O.", role:"Owner, Northbridge Retail", grad:"linear-gradient(135deg,#0B2E1E,#7FA087)" },
+    { quote:"Our support response time dropped dramatically after they redesigned our process. Genuinely felt like a team that cared about the outcome.", name:"Tunde A.", role:"Ops Lead, Coastline Logistics", grad:"linear-gradient(135deg,#C9962B,#0B2E1E)" },
+    { quote:"The dashboard they built turned data we were sitting on into decisions we actually make every week now.", name:"Amina S.", role:"Founder, Amina Foods", grad:"linear-gradient(135deg,#375A42,#7FA087)" }
+  ];
+
+  /* ---------- NAV ---------- */
+  const nav = document.getElementById('nav');
+  const burger = document.getElementById('burger');
+  const mobilePanel = document.getElementById('mobilePanel');
+  const scrim = document.getElementById('scrim');
+  const navLinks = document.querySelectorAll('.nav-links a, .mobile-panel a');
+
+  window.addEventListener('scroll', ()=>{
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive:true });
+
+  function toggleMenu(open){
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    mobilePanel.classList.toggle('open', open);
+    scrim.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  burger.addEventListener('click', ()=> toggleMenu(!mobilePanel.classList.contains('open')));
+  scrim.addEventListener('click', ()=> toggleMenu(false));
+  document.querySelectorAll('.mobile-panel a').forEach(a=> a.addEventListener('click', ()=> toggleMenu(false)));
+
+  const sections = document.querySelectorAll('section[id]');
+  const activeObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        navLinks.forEach(l=>l.classList.remove('active'));
+        document.querySelectorAll('.nav-links a[href="#'+entry.target.id+'"]').forEach(l=>l.classList.add('active'));
+      }
+    });
+  }, { rootMargin:'-45% 0px -50% 0px' });
+  sections.forEach(s=>activeObserver.observe(s));
+
+  /* ---------- REVEAL ON SCROLL ---------- */
+  const revealObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){ entry.target.classList.add('in'); revealObserver.unobserve(entry.target); }
+    });
+  }, { threshold:0.15 });
+  document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
+
+  /* ---------- PROJECTS ---------- */
+  const projectGrid = document.getElementById('projectGrid');
+  function initials(str){ return str.split(' ').map(w=>w[0]).slice(0,2).join(''); }
+
+  projects.forEach((p, i)=>{
+    const card = document.createElement('div');
+    card.className = 'project-card';
+    card.dataset.cat = p.cat;
+    card.innerHTML = `
+      <div class="project-thumb" style="background:${p.grad}">
+        <div class="project-info">
+          <span class="project-tag">${p.tag}</span>
+          <h3>${p.title}</h3>
+        </div>
+      </div>
+      <div class="project-view"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></div>
+    `;
+    card.addEventListener('click', ()=> openModal(p));
+    projectGrid.appendChild(card);
+  });
+
+  document.querySelectorAll('.filter-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.project-card').forEach(card=>{
+        card.classList.toggle('hide', filter !== 'all' && card.dataset.cat !== filter);
+      });
+    });
+  });
+
+  /* ---------- MODAL ---------- */
+  const modalScrim = document.getElementById('modalScrim');
+  const modalClose = document.getElementById('modalClose');
+  function openModal(p){
+    document.getElementById('modalThumb').style.background = p.grad;
+    document.getElementById('modalTag').textContent = p.tag;
+    document.getElementById('modalTitle').textContent = p.title;
+    document.getElementById('modalDesc').textContent = p.desc;
+    document.getElementById('modalService').textContent = p.service;
+    document.getElementById('modalScope').textContent = p.scope;
+    document.getElementById('modalYear').textContent = p.year;
+    modalScrim.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(){ modalScrim.classList.remove('open'); document.body.style.overflow=''; }
+  modalClose.addEventListener('click', closeModal);
+  modalScrim.addEventListener('click', (e)=>{ if(e.target === modalScrim) closeModal(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
+
+  /* ---------- TEAM ---------- */
+  const teamGrid = document.getElementById('teamGrid');
+  team.forEach((m, i)=>{
+    const card = document.createElement('div');
+    card.className = 'team-card reveal';
+    card.style.setProperty('--i', i);
+    card.innerHTML = `
+      <div class="team-avatar" style="background:${m.grad}">${initials(m.name)}</div>
+      <h4>${m.name}</h4>
+      <div class="role">${m.role}</div>
+      <div class="team-socials">
+        <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="#" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/></svg></a>
+      </div>
+    `;
+    teamGrid.appendChild(card);
+    revealObserver.observe(card);
+  });
+
+  /* ---------- TESTIMONIALS ---------- */
+  const tTrack = document.getElementById('tTrack');
+  const tDots = document.getElementById('tDots');
+  let tIndex = 0, tTimer;
+
+  testimonials.forEach((t, i)=>{
+    const slide = document.createElement('div');
+    slide.className = 't-slide';
+    slide.innerHTML = `
+      <div class="t-card">
+        <p class="t-quote">${t.quote}</p>
+        <div class="t-person">
+          <div class="t-avatar" style="background:${t.grad}">${initials(t.name)}</div>
+          <div><b>${t.name}</b><span>${t.role}</span></div>
+        </div>
+      </div>
+    `;
+    tTrack.appendChild(slide);
+
+    const dot = document.createElement('button');
+    dot.className = 't-dot' + (i===0 ? ' active' : '');
+    dot.addEventListener('click', ()=> goToSlide(i));
+    tDots.appendChild(dot);
+  });
+
+  function goToSlide(i){
+    tIndex = (i + testimonials.length) % testimonials.length;
+    tTrack.style.transform = `translateX(-${tIndex * 100}%)`;
+    document.querySelectorAll('.t-dot').forEach((d,idx)=> d.classList.toggle('active', idx===tIndex));
+    resetAutoplay();
+  }
+  document.getElementById('tPrev').addEventListener('click', ()=> goToSlide(tIndex - 1));
+  document.getElementById('tNext').addEventListener('click', ()=> goToSlide(tIndex + 1));
+
+  function resetAutoplay(){
+    clearInterval(tTimer);
+    tTimer = setInterval(()=> goToSlide(tIndex + 1), 6500);
+  }
+  resetAutoplay();
+
+  /* ---------- CONTACT FORM ---------- */
+  const form = document.getElementById('contactForm');
+  const formSuccess = document.getElementById('formSuccess');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(!form.checkValidity()){ form.reportValidity(); return; }
+
+    const btn = form.querySelector('button[type="submit"]');
+    const originalHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    // NOTE: This demo submits nowhere by default. To receive real messages,
+    // set FORM_ENDPOINT below to your https://formsubmit.co/YOUR_EMAIL endpoint
+    // (or any form backend) and switch USE_ENDPOINT to true.
+    const USE_ENDPOINT = false;
+    const FORM_ENDPOINT = "https://formsubmit.co/ajax/YOUR_EMAIL@example.com";
+
+    const finish = ()=>{
+      form.reset();
+      formSuccess.classList.add('show');
+      btn.disabled = false;
+      btn.innerHTML = originalHTML;
+      setTimeout(()=> formSuccess.classList.remove('show'), 6000);
+    };
+
+    if(USE_ENDPOINT){
+      fetch(FORM_ENDPOINT, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(form)))
+      }).then(finish).catch(finish);
+    } else {
+      setTimeout(finish, 500);
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
